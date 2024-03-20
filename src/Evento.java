@@ -16,10 +16,9 @@ import java.util.List;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.HOURS;
 
-class Evento {
+public class Evento {
     private static final String arquivoTxt = "events.data";
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-    private static boolean dataFormatoValido;
     private static Formatter output;
     private String nome;
     private String endereco;
@@ -36,6 +35,7 @@ class Evento {
                 "Descrição: " + descricao + "\n\n";
     }
 
+    //Construtor
     public Evento(String nome, String endereco, String categoria, LocalDateTime dataHoraEvento, String descricao) {
         this.nome = nome;
         this.endereco = endereco;
@@ -47,7 +47,7 @@ class Evento {
 
 
     public static Evento cadastro() {
-        //método para cadastro de novos eventos,
+        //Método para cadastro de novos eventos,
         Scanner input = new Scanner(System.in);
 
         System.out.println("Informe o nome do evento:");
@@ -60,6 +60,7 @@ class Evento {
         String categoria = input.nextLine();
 
         LocalDateTime horario = null;
+        boolean dataFormatoValido = false;
         while (!dataFormatoValido) {
             System.out.println("Informe o horário do evento (dd-MM-yyyy HH:mm):");
             try {
@@ -117,7 +118,7 @@ class Evento {
         while(lista.hasNext()) {
             String linhaDoArquivo = lista.nextLine();
             String[] parts = linhaDoArquivo.split(";");
-            if (parts.length == 5) { // temos 5 categorias para cada evento
+            if (parts.length == 5) { // temos 5 atributos para cada evento
                 String nome = parts[0];
                 String endereco = parts[1];
                 String categoria = parts[2];
@@ -133,6 +134,7 @@ class Evento {
                 System.out.println("Local: " + endereco);
                 System.out.println("Categoria: " + categoria);
                 System.out.println("Data e Hora: " + eventDateTime.format(DATE_TIME_FORMATTER));
+                //Teste para verificar se o evento já ocorreu e informar em quanto tempo irá começar
                 if (eventDateTime.isBefore(LocalDateTime.now())) System.out.println("O evento já ocorreu");
                 else {
                     long intervaloTemporal = DAYS.between(LocalDateTime.now(), eventDateTime);
@@ -144,12 +146,17 @@ class Evento {
                 System.out.println("Descrição: " + descricao);
                 System.out.println(); // Para espaçar os eventos
             }
+            else{
+                System.err.println("Erro ao segmentar os dados de evento.");
+                return null;
+            }
         }
         lista.close();
         return (todosEventos);
     }
 
     public static List<Evento> eventosFuturos(List<Evento> todosEventos){
+        //Esse método filtra os eventos que não ainda não ocorreram e os retorna
         List<Evento> eventosFuturos = new ArrayList<>();
         for (Evento evento : todosEventos) {
             if (evento.dataEvento.isAfter(LocalDateTime.now())) {

@@ -22,6 +22,7 @@ public class Main {
         System.out.printf("Bem-vindo ao calendário de Eventos!%n"+
                         "Os eventos já cadastrados são: %n%n");
         List<Evento> eventos = Evento.listarEventos();
+        List<Usuarios> usuarios = Usuarios.obterUsuarios();
         while(true){
             System.out.printf("O que você deseja fazer?%n" +
                     "\t1- Cadastrar novo usuário:%n" +
@@ -43,10 +44,13 @@ public class Main {
                     System.out.printf("Saindo do programa!%n%n");
                     return;
                 case 1:
-                    //implementar o cadastro de alunos;
+                    Usuarios novoUsuario = Usuarios.cadastroUsuario();
+                    assert usuarios != null;
+                    usuarios.add(novoUsuario);
                     break;
                 case 2:
-                    //implementar a listagem de todos os alunos para consulta;
+                    if(usuarios != null)
+                        System.out.print("Lista de usuários cadastrados: " + usuarios);
                     break;
                 case 3:
                     Evento novoEvento = Evento.cadastro();
