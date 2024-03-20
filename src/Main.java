@@ -18,15 +18,17 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         int opcaoMenu;
-        List<Evento> eventos = new ArrayList<>();
         Scanner input = new Scanner(System.in);
+        System.out.printf("Bem-vindo ao calendário de Eventos!%n"+
+                        "Os eventos já cadastrados são: %n%n");
+        List<Evento> eventos = Evento.listarEventos();
         while(true){
             System.out.printf("O que você deseja fazer?%n" +
                     "\t1- Cadastrar novo usuário:%n" +
                     "\t2- Listar usuários %n"+
                     "\t3- Cadastrar novo evento%n" +
-                    "\t4- Abrir arquivo com os dados dos eventos%n" +
-                    "\t5- Listar eventos em ordem cronológica%n"+
+                    "\t4- Listar os próximos eventos%n" +
+                    "\t5- Listar todos os eventos em ordem cronológica%n"+
                     "\t0 - Sair do programa%n");
 
             try {
@@ -48,19 +50,18 @@ public class Main {
                     break;
                 case 3:
                     Evento novoEvento = Evento.cadastro();
+                    assert eventos != null;
+                    eventos.add(novoEvento);
                     break;
                 case 4:
-                    eventos = Evento.listarEventos();
+                    if (eventos != null) {
+                        List<Evento> eventosFuturos = Evento.eventosFuturos(eventos);
+                        eventosFuturos.sort(Comparator.comparing(Evento::getDataEvento));
+                        System.out.print("Próximos eventos: " + eventosFuturos);
+                    }
                     break;
                 case 5:
-                    if(eventos != null) {
-                        Collections.sort(eventos, new Comparator<Evento>() {
-                            @Override
-                            public int compare(Evento o1, Evento o2) {
-                                return o1.getDataEvento().compareTo(o2.getDataEvento());
-                            }
-                        });
-                    }
+                    if(eventos != null) eventos.sort(Comparator.comparing(Evento::getDataEvento));
                     System.out.print("Lista de eventos em ordem: " + eventos);
                     break;
                 default:

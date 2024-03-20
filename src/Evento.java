@@ -33,7 +33,7 @@ class Evento {
                 "Endereço: " + endereco + "\n" +
                 "Categoria: " + categoria + "\n" +
                 "Data e Hora: " + dataEvento.format(DATE_TIME_FORMATTER) + "\n" +
-                "Descrição: " + descricao + "\n";
+                "Descrição: " + descricao + "\n\n";
     }
 
     public Evento(String nome, String endereco, String categoria, LocalDateTime dataHoraEvento, String descricao) {
@@ -124,7 +124,7 @@ class Evento {
                 LocalDateTime eventDateTime = LocalDateTime.parse(parts[3], DATE_TIME_FORMATTER);
                 String descricao = parts[4];
 
-                // Create an Evento object and add it to the list
+                // Cria um objeto Evento e adiciona à lista
                 Evento evento = new Evento(nome, endereco, categoria, eventDateTime, descricao);
                 todosEventos.add(evento);
 
@@ -142,16 +142,28 @@ class Evento {
                         System.out.println("O evento começará em " + HOURS.between(LocalDateTime.now(), eventDateTime) + " horas. ");
                 }
                 System.out.println("Descrição: " + descricao);
-                System.out.println(); // For spacing between events
+                System.out.println(); // Para espaçar os eventos
             }
         }
         lista.close();
-        return todosEventos;
+        return (todosEventos);
+    }
+
+    public static List<Evento> eventosFuturos(List<Evento> todosEventos){
+        List<Evento> eventosFuturos = new ArrayList<>();
+        for (Evento evento : todosEventos) {
+            if (evento.dataEvento.isAfter(LocalDateTime.now())) {
+                eventosFuturos.add(evento);
+            }
+        }
+        return eventosFuturos;
     }
 
     public LocalDateTime getDataEvento() {
         return dataEvento;
     }
+
+
 }
 
 
